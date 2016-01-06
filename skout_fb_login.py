@@ -7,7 +7,9 @@ import os
 import unittest
 from appium import webdriver
 from time import sleep
-from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
  
 class SkoutAndroidTests(unittest.TestCase):
     "Class to run tests against the Skout app"
@@ -22,7 +24,8 @@ class SkoutAndroidTests(unittest.TestCase):
         desired_caps['appPackage'] = 'com.skout.android'
         desired_caps['appActivity'] = 'com.skout.android.activities.Skout'
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
- 
+        
+    
     def tearDown(self):
         "Tear down the test"
         self.driver.quit()
@@ -30,32 +33,25 @@ class SkoutAndroidTests(unittest.TestCase):
     def test_fb_login(self):
                
         "Test if login with Facebook works correctly"
-        sleep(5)
-        element = self.driver.find_element_by_id("com.skout.android:id/prelogin_fb_button")
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "com.skout.android:id/prelogin_fb_button")))
         element.click()
-                 
-        #self.driver.switch_to.context("WEBVIEW_com.skout.android")
+        self.driver.implicitly_wait(20)
         
-        sleep(7)
+        """Enter credentials"""
         logon_elems = self.driver.find_elements_by_android_uiautomator('new UiSelector().className("android.widget.EditText")')
         print logon_elems
-        logon_elems[0].send_keys("sailee.choudhary@gmail.com")
+        logon_elems[0].send_keys("saileechoudhary@yahoo.com")
         logon_elems[1].send_keys("fblogin1@")
-        sleep(10)
+        self.driver.implicitly_wait(20)
         login_button = self.driver.find_elements_by_android_uiautomator('new UiSelector().className("android.widget.Button")')
         print login_button
         login_button[0].click()
         
-        sleep(5)
+        self.driver.implicitly_wait(20)
         ok_button = self.driver.find_elements_by_android_uiautomator('new UiSelector().className("android.widget.Button")')
         print ok_button
         ok_button[1].click()
-        #self.driver.find_elements_by_android_uiautomator('new UiSelector().className("android.widget.Button")').click()
         
-        #self.driver.find_element_by_android_uiautomator('new UiSelector().description("Welcome to Facebook")')
-        #self.driver.find_element_by_class_name("android.widget.EditText")
-        #temp = self.driver.find_element_by_xpath("//android.webkit.WebView/android.view.View[@index='0']")
-        #print temp
         self.driver.find_element_by_id("com.skout.android:id/doneBtn").click()
         
 if __name__ == '__main__':

@@ -6,15 +6,11 @@ Created on Jul 30, 2015
 import os
 import unittest
 from appium import webdriver
-from time import sleep
-from selenium.webdriver.common.alert import Alert
-import random
-from warnings import catch_warnings
 from selenium.common.exceptions import NoSuchElementException
-from appium.webdriver.common.touch_action import TouchAction
-from appium.webdriver.mobilecommand import MobileCommand as Command
-from selenium.webdriver.common.action_chains import ActionChains
-from Tkconstants import RIGHT
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+ 
  
 class SkoutAndroidTests(unittest.TestCase):
     "Class to run tests against the Skout app"
@@ -38,22 +34,23 @@ class SkoutAndroidTests(unittest.TestCase):
                
         
         "Test if all elements are present"
-        sleep(15)
-        element = self.driver.find_element_by_id("com.skout.android:id/prelogin_login_here")
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "com.skout.android:id/prelogin_login_here")))
         element.click()
-        
-        "Login"
-        self.driver.find_element_by_id("com.skout.android:id/emailField").send_keys("blue143")
+                
+        """Login using credentials"""
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "com.skout.android:id/emailField")))
+        element.send_keys("blue143")
+        #self.driver.find_element_by_id("com.skout.android:id/emailField").send_keys("blue143")
         self.driver.find_element_by_id("com.skout.android:id/pwField").send_keys("21143")
         self.driver.find_element_by_id("com.skout.android:id/doneBtn").click()
-        sleep(20)
+        
         
         try:
-            self.driver.find_element_by_name("Done")
+            self.driver.find_element_by_name("Done").click()
         except NoSuchElementException:
             ""
-        
-        self.driver.find_element_by_name("Meet People").click()
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "Meet People")))
+        element.click()
         
         
         "Check if all elements are present"
@@ -214,17 +211,7 @@ class SkoutAndroidTests(unittest.TestCase):
         except NoSuchElementException:
             print "'Logout' is not present"    
                 
-#         self.driver.find_element_by_android_uiautomator(
-#         'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text("Settings").instance(0));').click()
-#         
-#         self.driver.find_element_by_id("com.skout.android:id/settings_skout_premium").click()
-        
-#         try:
-#             self.driver.find_element_by_name("Go Premium for $9.99/month")
-#             print "Go Premium available"
-#         except NoSuchElementException:
-#             print "Go Premium not available"
-        
+       
         
 #---START OF SCRIPT
 if __name__ == '__main__':

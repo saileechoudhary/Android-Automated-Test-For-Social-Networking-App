@@ -6,8 +6,6 @@ Created on Jul 30, 2015
 import os
 import unittest
 from appium import webdriver
-from time import sleep
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -34,12 +32,14 @@ class SkoutAndroidTests(unittest.TestCase):
                
          
         "Test if sign up works correctly"
-        sleep(7)        
-        element = self.driver.find_element_by_id("com.skout.android:id/prelogin_signup")
+         
+        """ Search for sign up button """    
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "com.skout.android:id/prelogin_signup")))
         element.click()
         
-         
-        self.driver.find_element_by_name("Name").send_keys("tester04")
+        """Enter all the details""" 
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "Name")))
+        element.send_keys("tester04")
         self.driver.find_element_by_id("com.skout.android:id/signup_gender_female").click()
         
         self.driver.find_element_by_id("com.skout.android:id/signup_birthday").click()
@@ -50,44 +50,35 @@ class SkoutAndroidTests(unittest.TestCase):
         
         self.driver.find_element_by_id("com.skout.android:id/signup_interest_both").click()
         
-        #self.driver.find_element_by_id("com.skout.android:id/signup_profile_icon").click()
-#         #self.driver.find_element_by_xpath("//android.widget.ListView[@index='0']").send_keys('Jun') 
-#         self.driver.find_element_by_name("Documents").click()
-#         #temp.find_element_by_class_name("android.widget.LinearLayout[@index='0']").click()
-#         #self.driver.find_element_by_id("android:id/up").click()
-#         self.driver.find_element_by_name("Recent").click()
-#         #self.driver.find_element_by_id("com.android.documentsui:id/grid")
-#         self.driver.find_element_by_name("Aug 14").click()
-#         #textfields = self.driver.find_element_by_id("android:id/action_bar_title")
-#         #self.assertEqual('Select thumbnail image', textfields)
-#         self.driver.find_element_by_id("com.skout.android:id/crop_image_ok").click()    
-#         
+        """ Insert profile picture """
+        self.driver.find_element_by_id("com.skout.android:id/signup_profile_icon").click()
+        self.driver.find_element_by_name("Documents").click()
+        self.driver.find_element_by_name("Recent").click()
+        self.driver.find_element_by_name("Aug 14").click()
+        self.driver.find_element_by_id("com.skout.android:id/crop_image_ok").click()    
+         
         self.driver.find_element_by_id("com.skout.android:id/doneBtn").click()
-#         #textfields = self.driver.find_elements_by_class_name("android.widget.TextView")
-#         #self.assertEqual('MATCH SETTINGS', textfields[0].text)
-#         print "test"
-        
-        self.driver.find_element_by_id("com.skout.android:id/emailField").send_keys("abcdef@9.com")
+         
+        """ Enter email address and password """
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "com.skout.android:id/emailField")))
+        element.send_keys("abcdef@9.com")
         self.driver.find_element_by_id("com.skout.android:id/pwField").send_keys("password")
-        #self.driver.find_element_by_xpath("android.widget.EditText[@NAF='true']").send_keys("password")
         self.driver.find_element_by_id("com.skout.android:id/confirmPwField").send_keys("password")
         self.driver.find_element_by_id("com.skout.android:id/doneBtn").click()
         
-        sleep(20)
-        print self.driver.contexts
-        print self.driver.current_context
-        #self.driver.switch_to.context("WEBVIEW_com.skout.android")
-        print self.driver.current_context
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.NAME, "Skip")))
+        element.click()
         
+        """ Handle captcha """
+        """sleep(20)
         self.driver.find_element_by_android_uiautomator('new UiSelector().className("android.widget.CheckBox")').click()
         sleep(20)
         el = self.driver.find_elements_by_android_uiautomator('new UiSelector().className("android.widget.Button")')
         print el 
         el[3].click()
         sleep(4)
-        #submit button
         self.driver.find_element_by_android_uiautomator('new UiSelector().className("android.widget.Button")').click()
-        #self.driver.find_element_by_id("com.skout.android:id/menu_skip").click()
+        """
         
  
 #---START OF SCRIPT
